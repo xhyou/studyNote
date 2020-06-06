@@ -1,0 +1,169 @@
+# 关系的含义
+
+![image-20200603213606360](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603213606360.png)
+
+> 类和类之间的关系:依赖，泛化(击沉),实现，关联，组合和聚合
+
+# UML类图
+
+##      简单类图
+
+```java
+@Data
+public class Person{
+  private Integer id;
+  private String name;
+}
+```
+
+![image-20200603224605185](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603224605185.png)
+
+# 类的依赖 、泛化、实现
+
+## 依赖
+
+```java
+//类1
+public class Department {
+}
+//类2
+public class IDCard {
+}
+//类3
+public class Person {
+}
+//类4
+public class PersonDao {
+}
+//依赖1~4个类的
+public class PersonServiceBean {
+
+    private PersonDao personDao;
+
+    public void save(Person person){
+
+    }
+    public IDCard getIDCard(Integer personId){
+        return  null;
+    }
+
+    public void modify(){
+        Department department = new Department();
+    }
+}
+
+```
+
+UM实现图
+
+![image-20200603230146811](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603230146811.png)
+
+> 依赖关系的小结:
+>
+>    1.只要是类中用到了对方,那么他们之间就存在依赖关系。
+>
+>    2.如果是类的成员属性
+>
+>    3.如果是方法的返回类型
+>
+>    4.是方法的接收参数
+>
+>    5.方法中使用到
+
+## 泛化
+
+```java
+//类一
+public abstract class Animal {
+    abstract void run();
+}
+
+public class Dog extends Animal {
+    @Override
+    void run() {
+        System.out.println("小狗四条腿跑...");
+    }
+}
+```
+
+![image-20200603231429868](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603231429868.png)
+
+## 实现
+
+```java
+//接口
+public interface Animal {
+    void run();
+}
+//实现接口的类
+public class Dog implements Animal {
+
+    @Override
+    public void run() {
+        System.out.println("小狗四条腿跑...");
+    }
+}
+```
+
+![image-20200603231554245](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603231554245.png)
+
+# 关联、聚合、组合
+
+## 关联
+
+```java
+public class Person{
+  private IDCard idcard;
+}
+
+public class IDCard{
+  //private Person person; 如果注释了 就是单项关联 如过放开注释就是双向关联
+}
+```
+
+![image-20200603232402344](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603232402344.png)
+
+## 聚合
+
+> 什么是聚合关系:
+>
+> ​    表示整体和部分的关系,整体和部分可以分开
+
+```java
+public class Mouse {} //类一
+public class Monitor {} //类二
+//表示整体和部分的关系,整体和部分可以分开
+//假设离开了鼠标和显示器,这个类还是个电脑
+public class Computer {
+
+    private Mouse mouse;
+
+    private Moniter monitor;
+
+    public void setMouse(Mouse mouse) {
+        this.mouse = mouse;
+    }
+
+    public void setMonitor(Monitor monitor) {
+        this.monitor = monitor;
+    }
+}
+
+```
+
+![image-20200603233705218](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200603233705218.png)
+
+## 组合
+
+```java
+public class Head {}
+public class IDCard{}
+public class Person {
+   //聚合关系
+   private IDCard idCard;
+   //组合关系,当person销毁heady也一起销毁
+   private Head head = new Head();
+}
+```
+
+![image-20200604071558339](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200604071558339.png)
