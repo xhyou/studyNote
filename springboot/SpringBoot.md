@@ -249,6 +249,52 @@ public class Person {
 >
 >    spring.datasource.filters = stat,wall,slf4j
 
+1.pom文件
+
+```xml
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.1.21</version>
+</dependency>
+```
+
+配置文件
+
+```properties
+# 数据库访问配置
+# 主数据源，默认的
+spring.datasource.type= com.alibaba.druid.pool.DruidDataSource 
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/demo?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+spring.datasource.username=root
+spring.datasource.password=root
+
+# 下面为连接池的补充设置，应用到上面所有数据源中
+# 初始化大小，最小，最大
+spring.datasource.initialSize=5
+spring.datasource.minIdle=5
+spring.datasource.maxActive=20
+## 配置获取连接等待超时的时间
+spring.datasource.maxWait=60000
+## 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+spring.datasource.timeBetweenEvictionRunsMillis=60000
+## 配置一个连接在池中最小生存的时间，单位是毫秒
+spring.datasource.minEvictableIdleTimeMillis=300000
+spring.datasource.validationQuery=SELECT 1 FROM DUAL
+spring.datasource.testWhileIdle=true
+spring.datasource.testOnBorrow=false
+spring.datasource.testOnReturn=false
+## 打开PSCache，并且指定每个连接上PSCache的大小
+spring.datasource.poolPreparedStatements=true
+spring.datasource.maxPoolPreparedStatementPerConnectionSize=20
+## 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+## 注意如果是需要配置log4j 需要引入pom文件 否则启动会报错误
+spring.datasource.filters=stat,wall  
+## 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+spring.datasource.connectionProperties=stat.mergeSql=true;stat.slowSqlMillis=5000
+```
+
 核心代码
 
 ```java
@@ -503,7 +549,7 @@ public class HandlerExceptionController {
 </html>
 ```
 
-自定义异常类,当页面找不到时候跳转404页面
+自定义异常类,当页面找不到时候跳转404页面 (书写的位置为templates/error)
 
 ```java
 @Controller

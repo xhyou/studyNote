@@ -568,9 +568,9 @@ OK
 11 
 ```
 
-## Bitmaps
+## Bitmap
 
-> 使用场景:位存储 0 1 活跃不活跃 登录为登录。有两个状态得都可以使用bitmap
+> 使用场景:位存储 0 1 活跃不活跃 登录未登录。有两个状态得都可以使用bitmap
 
 > 案例:使用bitmap统计一周的打卡记录 1为打卡 0为未打卡
 
@@ -737,7 +737,7 @@ QUEUED
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
-    </dependencies>
+</dependencies>
 ```
 
 * 测试连接
@@ -1736,7 +1736,7 @@ pidfile /var/run/redis_6379.pid # 如果以后台的方式运行，我们就需�
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
 loglevel notice
-logfile "" #日子的文件位置,默认当前下
+logfile "" #日志的文件位置,默认当前下
 databases 16 # 数据库的数量，默认是 16 个数据库
 always-show-logo yes # 是否总是显示LOGO
 ```
@@ -1824,7 +1824,7 @@ rdb保存的文件是dump.rdb文件格式,文件名是由redis.conf得来的
 
 3. 退出redis
 
-   会生成y一个dump.rdb文件
+   会生成一个dump.rdb文件
 
 > 存在的位置
 

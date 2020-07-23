@@ -332,7 +332,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Service //特别把包打出来 它引用的是com.alibaba.dubbo.config.annotation.Service;
+@Service //它引用的是com.alibaba.dubbo.config.annotation.Service;
 public class UserServiceImpl implements UserService {
     /**
      * 根据用户的id查找收货地址

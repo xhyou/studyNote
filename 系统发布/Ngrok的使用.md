@@ -1,6 +1,6 @@
 # Ngrok是什么？
 
-ngrok 是一个[反向代理](https://baike.baidu.com/item/反向代理/7793488)，通过在公共的端点和本地运行的 Web 服务器之间建立一个安全的通道。ngrok 可捕获和分析所有通道上的流量，便于后期分析和重放。
+ngrok 是一个[反向代理](https://baike.baidu.com/item/反向代理/7793488)，通过在公共的端点和本地运行的 Web 服务器之间建立一个安全的通道。ngrok 可捕获和分析d所有通道上的流量，便于后期分析和重放。
 
 # Ngrok的作用?
 
@@ -36,8 +36,6 @@ ngrok 是一个[反向代理](https://baike.baidu.com/item/反向代理/7793488)
 ![image-20200513134905587](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200513134905587.png)
 
 在启动工具中,输入自己的隧道id
-
-!(C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200513135019578.png)
 
 ![image-20200513135054967](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200513135054967.png)
 

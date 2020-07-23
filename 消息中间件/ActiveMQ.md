@@ -143,8 +143,7 @@ root       1820      1  0 14:32 pts/0    00:00:09 /u
         //创建了一个消费者
         MessageConsumer consumer = session.createConsumer(queue);
         //同步阻塞方式(receive)
-        //订阅者或者接收者调用MessageConsumer的receive()方法来接受消息,receive方法能够在接收消息之前(或者)
-        //将一直阻塞
+        //订阅者或者接收者调用MessageConsumer的receive()方法来接受消息,receive方法能够在接收消息之         //前将一直阻塞
         while(true){
             TextMessage receive = (TextMessage)consumer.receive();
             // TextMessage receive = (TextMessage)consumer.receive(4000L); 4S还没有接收到消息断开连接
@@ -181,7 +180,7 @@ root       1820      1  0 14:32 pts/0    00:00:09 /u
 
 > 注意:
 >
-> 1.如果先创建消费者(2个),在创建生产者,那么者两个消费者一人消费一半生产的内容
+> 1.如果先创建消费者(2个),在创建生产者,那么这两个消费者一人消费一半生产的内容
 >
 > 2.如果先创建生产者,在创建A消费者,在创建B消费者.那么A消费者消费全部内容,B消费者无消费内容 
 
@@ -387,7 +386,7 @@ Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
 # 签收
 
 ```java
-//一般使用在生产者中
+//一般使用在消费者中
  Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
 //核心代码
  TextMessage message = (TextMessage) consumer.receive();
@@ -408,7 +407,7 @@ Session session = connection.createSession(false,Session.AUTO_ACKNOWLEDGE);
 
 ![image-20200524153405403](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200524153405403.png)
 
-# 不同配置启动MQ
+# 配置启动指定MQ
 
 > 按照不同的conf配置文件来启动activemq
 
@@ -638,7 +637,7 @@ spring.activemq.broker-url=tcp://192.168.234.128:61616
 spring.activemq.user=admin
 spring.activemq.password=admin
 spring.jms.pub-sub-domain=false
-# spring.jms.pub-sub-domain=true 代表设置的主题模式
+# spring.jms.pub-sub-domain=true //true和false代表是主题还是队列
 #自定义队列名称
 myQueen=boot-active-mq
 myTopic=boot-topic
@@ -699,11 +698,13 @@ public class ProducerMQ {
         jmsMessagingTemplate.convertAndSend(queue,"hello producer");
     }
 
+    //每3S发送一次消息队列
     @Scheduled(fixedDelay = 3000)
     public void produceMsgSend(){
         jmsMessagingTemplate.convertAndSend(queue,"hello producer");
     }
-
+	
+    //每3S发送一次主题信息
     @Scheduled(fixedDelay = 3000)
     public void produceMsgTopicSend(){
         System.out.println("执行了。。。。。");
@@ -799,7 +800,7 @@ class ActivemqApplicationTests {
 
 > lock文件锁,表示当前获得kahadb读写的broker
 
-> db.free 当前db.data文件里哪些页面时空闲的,文件具体内容时所有的空闲的Id
+> db.free 当前db.data文件里哪些页面是空闲的,文件具体内容是所有的空闲的Id
 
 ### LevelDB
 
@@ -808,7 +809,7 @@ class ActivemqApplicationTests {
 ```xml
 配置文件activemq.xml中，如下
    <persistenceAdapter>
-         <levelDB directory="${activemq.data}/kahadb"/>
+         <levelDB directory="${activemq.data}/levelDB"/>
    </persistenceAdapter>
 ```
 
@@ -822,8 +823,8 @@ class ActivemqApplicationTests {
 #2. 修改activemq.xml的配置文件
 <!--  
 <persistenceAdapter>
-            <kahaDB directory="${activemq.data}/kahadb"/>
-      </persistenceAdapter>
+    <kahaDB directory="${activemq.data}/kahadb"/>
+</persistenceAdapter>
 -->
 <persistenceAdapter>  
       <jdbcPersistenceAdapter dataSource="#mysql-ds" createTableOnStartup="true"/> 
@@ -1085,8 +1086,6 @@ public class ProductTopic{
 >
 > 一个消息被redelivedred超过默认的最大重发次数（默认6次）时，消费的回个MQ发一个“poison ack”表示这个消息有毒，告诉broker不要再发了。这个时候broker会把这个消息放到DLQ（死信队列）。
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps1.jpg)
-
 验证死信队列
 
 ```java
@@ -1176,25 +1175,25 @@ public class ConsumerTopic {
 
 不管是queue还是topic，失败的消息都放到这个队列中。下面修改activemq.xml的配置，可以达到修改队列的名字
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps2.jpg)
+![image-20200629220636710](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200629220636710.png)
 
 **1.** ***\*individualDeadLetterStrategy\****
 
 可以为queue和topic单独指定两个死信队列。还可以为某个话题，单独指定一个死信队列。
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps3.jpg)
+![image-20200629220703830](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200629220703830.png)
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps4.jpg)
+![image-20200629220738967](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200629220738967.png)
 
 **1.** ***\*自动删除过期消息\****
 
 过期消息是值生产者指定的过期时间，超过这个时间的消息
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps5.jpg)
+![image-20200629220815737](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200629220815737.png)
 
 **1.** ***\*存放非持久消息到死信队列中\****
 
-![img](file:///C:\Users\xuehy\AppData\Local\Temp\ksohtml14980\wps6.jpg)
+![image-20200629220832391](C:\Users\xuehy\AppData\Roaming\Typora\typora-user-images\image-20200629220832391.png)
 
 ## 消息不被重复消费，幂等性
 
@@ -1208,4 +1207,4 @@ public class ConsumerTopic {
 >
 >    1.如果消息是做数据库的插入操作,给这个消息一个唯一主键,那么就算重复消费的情况下，会导致主键冲突，避免数据库的脏数据
 >
-> ​    2.可以使用redis,记录key-value,消费前去redis中查询是否有消费记录,有的话就说明重复消费
+> 2.可以使用redis,记录key-value,消费前去redis中查询是否有消费记录,有的话就说明重复消费
